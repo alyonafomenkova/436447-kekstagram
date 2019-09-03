@@ -1,5 +1,5 @@
 'use strict';
-
+// Моковые данные
 var NUMBER_OF_PHOTOS = 25;
 var MIN_PHOTO_INDEX = 1;
 var MAX_PHOTO_INDEX = 25;
@@ -105,5 +105,27 @@ function generatePhotos(count) {
   return photos;
 }
 
-var res = generatePhotos(NUMBER_OF_PHOTOS);
-console.log('res: ', res);
+// Создание DOM-элементов соответствующих фотографиям и заполнение их данными из массива
+var pictures = document.querySelector('.pictures');
+var picture = document.querySelector('#picture').content.querySelector('.picture');
+
+function createPicture(photo) {
+  var pictureElement = picture.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = photo.url;
+  pictureElement.querySelector('.picture__likes').src = photo.likes;
+  pictureElement.querySelector('.picture__comments').src = photo.comments;
+  return pictureElement;
+}
+
+// Отрисовка сгенерированных DOM-элементов в блок
+function renderPictures(photos) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < photos.length; i++) {
+    fragment.appendChild(createPicture(photos[i]));
+  }
+
+  pictures.appendChild(fragment);
+}
+
+renderPictures(generatePhotos(NUMBER_OF_PHOTOS));
