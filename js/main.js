@@ -5,9 +5,15 @@ var MIN_PHOTO_INDEX = 1;
 var MAX_PHOTO_INDEX = 25;
 var MIN_LIKES = 15;
 var MAX_LIKES = 200;
-
-var urls = shuffleArray(getPhotoUrl());
-var comments = [
+var COMMENTS_NUMBER = {
+  MIN: 0,
+  MAX: 10
+}; 'TODO: Проверить enum'
+var SENTENCE_NUMBER = {
+  MIN: 1,
+  MAX: 2
+};
+var COMMENTS_TEXT = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -15,10 +21,12 @@ var comments = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-var names = [
+var NAMES = [
   'Анна', 'Василий', 'Алёна', 'Пётр', 'Андрей', 'Настя', 'Михаил', 'Паша', 'Маша', 'Сергей', 'Катя', 'Артём',
   'Михаил', 'Марина', 'Лиза', 'Вова', 'Ксения', 'Стас', 'Николай', 'Таня', 'Валентина', 'Ирина', 'Захар', 'Никита', 'Юрий',
 ];
+
+var urls = shuffleArray(getPhotoUrl());
 var avatars = getAvatar();
 
 // вспомогательная функция getRandomInteger
@@ -40,13 +48,6 @@ function shuffleArray(arr) {
   return out;
 }
 
-// вспомогательная функция getRandomShuffledSubarray
-function getRandomShuffledSubarray(arr) {
-  var out = shuffleArray(arr);
-  var index = getRandomInteger(1, out.length);
-  return out.slice(0, index);
-}
-
 function getPhotoUrl() {
   var array = [];
 
@@ -65,6 +66,31 @@ function getAvatar() {
   return array;
 }
 
+function createCommentDefiniteLength() {
+  var numberOfSentences = getRandomInteger(SENTENCE_NUMBER.MIN, SENTENCE_NUMBER.MAX);
+  shuffleArray(COMMENTS_TEXT);
+
+  if (numberOfSentences === SENTENCE_NUMBER.MIN) {
+    return COMMENTS_TEXT[0];
+  } else {
+    return COMMENTS_TEXT.slice(0, 2);
+  }
+}
+
+function generateComments(count) {
+  var randomComments = [];
+
+  for (var i = 0; i < count; i++) {
+    randomComments.push({
+      avatar: avatars.splice(0, 1)[0],
+      // splice(0, 1) - удаляем 1 элемент с индексом 0. Метод splice возвращает массив удалённых эл-ов. Нам нужен сам элемент, поэтому [0]
+      message: createCommentDefiniteLength(),
+      name: NAMES.splice(0, 1)[0]
+    });
+  }
+  return randomComments;
+}
+
 function generatePhotos(count) {
   var photos = [];
 
@@ -73,12 +99,11 @@ function generatePhotos(count) {
       url: urls.splice(0, 1)[0],
       // splice(0, 1) - удаляем 1 элемент с индексом 0. Метод splice возвращает массив удалённых эл-ов. Нам нужен сам элемент, поэтому [0]
       likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-      comments: getRandomShuffledSubarray(comments),
-      avatar: avatars.splice(0, 1)[0],
-      name: names.splice(0, 1)[0],
+      comments: generateComments(getRandomInteger(COMMENTS_NUMBER.MIN, COMMENTS_NUMBER.MAX)),
     });
   }
   return photos;
 }
 
-generatePhotos(NUMBER_OF_PHOTOS);
+var res = generatePhotos(NUMBER_OF_PHOTOS);
+console.log('res: ', res);
