@@ -213,5 +213,10 @@ function createCommentsList(array) {
 }
 
 var firstPhoto = photos[0];
+var commentCount = document.querySelector('.social__comment-count');
+var commentsLoader = document.querySelector('.comments-loader');
+
 createBigPicture(firstPhoto);
 createCommentsList(firstPhoto.comments);
+commentCount.classList.add('visually-hidden');
+commentsLoader.classList.add('visually-hidden');
