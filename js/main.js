@@ -227,6 +227,7 @@ var uploadBtn = document.querySelector('.img-upload__input');
 var uploadWindow = document.querySelector('.img-upload__overlay');
 var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
 var uploadPreviewContainer = uploadWindow.querySelector('.img-upload__preview');
+var previewPhoto = document.querySelector('.img-upload__preview > img');
 
 function showEffectsPreviewPhotos(src) {
   var effectsPreviewList = uploadWindow.querySelectorAll('.effects__preview');
@@ -237,7 +238,6 @@ function showEffectsPreviewPhotos(src) {
 }
 
 function showPreviewPhoto() {
-  var preview = document.querySelector('.img-upload__preview > img');
   var selectedImg = document.querySelector('input[type=file]').files[0];
   var reader = new FileReader();
 
@@ -247,14 +247,14 @@ function showPreviewPhoto() {
   }
 
   reader.onloadend = function () {
-    preview.src = reader.result;
+    previewPhoto.src = reader.result;
     showEffectsPreviewPhotos(reader.result);
   };
 
   if (selectedImg) {
     reader.readAsDataURL(selectedImg);
   } else {
-    preview.src = '';
+    previewPhoto.src = '';
   }
 }
 
@@ -279,3 +279,59 @@ function openUploadWindow() {
 
 uploadBtn.addEventListener('change', openUploadWindow);
 uploadWindowClose.addEventListener('click', closeUploadWindow);
+
+// Применение эффекта для изображения и Редактирование размера изображения
+var effectSlider = uploadWindow.querySelector('.effect-level');
+var noEffect = uploadWindow.querySelector('.effects__preview--none');
+var chromeEffect = uploadWindow.querySelector('.effects__preview--chrome');
+var sepiaEffect = uploadWindow.querySelector('.effects__preview--sepia');
+var marvinEffect = uploadWindow.querySelector('.effects__preview--marvin');
+var phobosEffect = uploadWindow.querySelector('.effects__preview--phobos');
+var heatEffect = uploadWindow.querySelector('.effects__preview--heat');
+
+function clearClassList(element) {
+  var classList = element.classList;
+
+  while (classList.length > 0) {
+    classList.remove(classList.item(0));
+  }
+}
+
+function applyEffects() {
+  noEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.add('visually-hidden');
+  });
+
+  chromeEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--chrome');
+  });
+
+  sepiaEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--sepia');
+  });
+
+  marvinEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--marvin');
+  });
+
+  phobosEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--phobos');
+  });
+
+  heatEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--heat');
+  });
+}
+
+applyEffects();
