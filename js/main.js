@@ -10,7 +10,7 @@ var MAX_AVATAR_INDEX = 6;
 var COMMENTS_NUMBER = {
   MIN: 0,
   MAX: 6
-}; 'TODO: Проверить enum'
+}; // TODO: Проверить enum
 var SENTENCE_NUMBER = {
   MIN: 1,
   MAX: 2
@@ -159,7 +159,7 @@ var Comment = {
 };
 var MAX_COMMENTS_VIEW_NUMBER = 5;
 
-bigPicture.classList.remove('hidden');
+// bigPicture.classList.remove('hidden');
 
 function createBigPicture(photo) {
   bigPicture.querySelector('.big-picture__img').src = photo.url;
@@ -216,7 +216,122 @@ var firstPhoto = photos[0];
 var commentCount = document.querySelector('.social__comment-count');
 var commentsLoader = document.querySelector('.comments-loader');
 
-createBigPicture(firstPhoto);
-createCommentsList(firstPhoto.comments);
+// createBigPicture(firstPhoto);
+// createCommentsList(firstPhoto.comments);
 commentCount.classList.add('visually-hidden');
 commentsLoader.classList.add('visually-hidden');
+
+// Загрузка изображения и показ формы редактирования
+var ESC_KEYCODE = 27;
+var uploadBtn = document.querySelector('.img-upload__input');
+var uploadWindow = document.querySelector('.img-upload__overlay');
+var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
+var uploadPreviewContainer = uploadWindow.querySelector('.img-upload__preview');
+var previewPhoto = document.querySelector('.img-upload__preview > img');
+
+function showEffectsPreviewPhotos(src) {
+  var effectsPreviewList = uploadWindow.querySelectorAll('.effects__preview');
+
+  for (var i = 0; i < effectsPreviewList.length; i++) {
+    effectsPreviewList[i].style.backgroundImage = 'url(' + src + ')';
+  }
+}
+
+function showPreviewPhoto() {
+  var selectedImg = document.querySelector('input[type=file]').files[0];
+  var reader = new FileReader();
+
+  if (!selectedImg.type.startsWith('image/')) {
+    console.log('Не картинка'); // TODO: Добавить сообщение об ошибке, если пользователь загружает не картинку
+    return;
+  }
+
+  reader.onloadend = function () {
+    previewPhoto.src = reader.result;
+    showEffectsPreviewPhotos(reader.result);
+  };
+
+  if (selectedImg) {
+    reader.readAsDataURL(selectedImg);
+  } else {
+    previewPhoto.src = '';
+  }
+}
+
+function onPageEscPress(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeUploadWindow();
+  }
+}
+
+function closeUploadWindow() {
+  uploadWindow.classList.add('hidden');
+  document.removeEventListener('keydown', onPageEscPress);
+  uploadBtn.value = '';
+}
+
+function openUploadWindow() {
+  showPreviewPhoto();
+  showEffectsPreviewPhotos();
+  uploadWindow.classList.remove('hidden');
+  document.addEventListener('keydown', onPageEscPress);
+}
+
+uploadBtn.addEventListener('change', openUploadWindow);
+uploadWindowClose.addEventListener('click', closeUploadWindow);
+
+// Применение эффекта для изображения и Редактирование размера изображения
+var effectSlider = uploadWindow.querySelector('.effect-level');
+var noEffect = uploadWindow.querySelector('.effects__preview--none');
+var chromeEffect = uploadWindow.querySelector('.effects__preview--chrome');
+var sepiaEffect = uploadWindow.querySelector('.effects__preview--sepia');
+var marvinEffect = uploadWindow.querySelector('.effects__preview--marvin');
+var phobosEffect = uploadWindow.querySelector('.effects__preview--phobos');
+var heatEffect = uploadWindow.querySelector('.effects__preview--heat');
+
+function clearClassList(element) {
+  var classList = element.classList;
+
+  while (classList.length > 0) {
+    classList.remove(classList.item(0));
+  }
+}
+
+function applyEffects() {
+  noEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.add('visually-hidden');
+  });
+
+  chromeEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--chrome');
+  });
+
+  sepiaEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--sepia');
+  });
+
+  marvinEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--marvin');
+  });
+
+  phobosEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--phobos');
+  });
+
+  heatEffect.addEventListener('click', function () {
+    clearClassList(previewPhoto);
+    effectSlider.classList.remove('visually-hidden');
+    previewPhoto.classList.add('effects__preview--heat');
+  });
+}
+
+applyEffects();
