@@ -10,7 +10,7 @@ var MAX_AVATAR_INDEX = 6;
 var COMMENTS_NUMBER = {
   MIN: 0,
   MAX: 6
-}; 'TODO: Проверить enum'
+}; // TODO: Проверить enum
 var SENTENCE_NUMBER = {
   MIN: 1,
   MAX: 2
@@ -159,7 +159,7 @@ var Comment = {
 };
 var MAX_COMMENTS_VIEW_NUMBER = 5;
 
-bigPicture.classList.remove('hidden');
+// bigPicture.classList.remove('hidden');
 
 function createBigPicture(photo) {
   bigPicture.querySelector('.big-picture__img').src = photo.url;
@@ -216,7 +216,66 @@ var firstPhoto = photos[0];
 var commentCount = document.querySelector('.social__comment-count');
 var commentsLoader = document.querySelector('.comments-loader');
 
-createBigPicture(firstPhoto);
-createCommentsList(firstPhoto.comments);
+// createBigPicture(firstPhoto);
+// createCommentsList(firstPhoto.comments);
 commentCount.classList.add('visually-hidden');
 commentsLoader.classList.add('visually-hidden');
+
+// Загрузка изображения и показ формы редактирования
+var ESC_KEYCODE = 27;
+var uploadBtn = document.querySelector('.img-upload__input');
+var uploadWindow = document.querySelector('.img-upload__overlay');
+var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
+var uploadPreviewContainer = uploadWindow.querySelector('.img-upload__preview');
+
+function showEffectsPreviewPhotos(src) {
+  var effectsPreviewList = uploadWindow.querySelectorAll('.effects__preview');
+
+  for (var i = 0; i < effectsPreviewList.length; i++) {
+    effectsPreviewList[i].style.backgroundImage = 'url(' + src + ')';
+  }
+}
+
+function showPreviewPhoto() {
+  var preview = document.querySelector('.img-upload__preview > img');
+  var selectedImg = document.querySelector('input[type=file]').files[0];
+  var reader = new FileReader();
+
+  if (!selectedImg.type.startsWith('image/')) {
+    console.log('Не картинка'); // TODO: Добавить сообщение об ошибке, если пользователь загружает не картинку
+    return;
+  }
+
+  reader.onloadend = function () {
+    preview.src = reader.result;
+    showEffectsPreviewPhotos(reader.result);
+  };
+
+  if (selectedImg) {
+    reader.readAsDataURL(selectedImg);
+  } else {
+    preview.src = '';
+  }
+}
+
+function onPageEscPress(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeUploadWindow();
+  }
+}
+
+function closeUploadWindow() {
+  uploadWindow.classList.add('hidden');
+  document.removeEventListener('keydown', onPageEscPress);
+  uploadBtn.value = '';
+}
+
+function openUploadWindow() {
+  showPreviewPhoto();
+  showEffectsPreviewPhotos();
+  uploadWindow.classList.remove('hidden');
+  document.addEventListener('keydown', onPageEscPress);
+}
+
+uploadBtn.addEventListener('change', openUploadWindow);
+uploadWindowClose.addEventListener('click', closeUploadWindow);
