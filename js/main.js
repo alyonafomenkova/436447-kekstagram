@@ -123,6 +123,7 @@ function generatePhotos(count) {
 // Создание DOM-элементов соответствующих фотографиям и заполнение их данными из массива
 var pictures = document.querySelector('.pictures');
 var picture = document.querySelector('#picture').content.querySelector('.picture');
+var photos = generatePhotos(NUMBER_OF_PHOTOS);
 
 function createPicture(photo) {
   var pictureElement = picture.cloneNode(true);
@@ -132,21 +133,8 @@ function createPicture(photo) {
   return pictureElement;
 }
 
-// Отрисовка сгенерированных DOM-элементов в блок
-function renderPictures(photos) {
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < photos.length; i++) {
-    fragment.appendChild(createPicture(photos[i]));
-  }
-
-  pictures.appendChild(fragment);
-}
-
-var photos = generatePhotos(NUMBER_OF_PHOTOS);
-renderPictures(photos);
-
-// Создание главного изображение, заполнение данными из первого элемента массива
+// Создание главного изображение
+var ESC_KEYCODE = 27;
 var bigPicture = document.querySelector('.big-picture');
 var commentsContainer = document.querySelector('.social__comments');
 var Comment = {
@@ -158,8 +146,6 @@ var Comment = {
   IMG_HEIGHT: 35
 };
 var MAX_COMMENTS_VIEW_NUMBER = 5;
-
-// bigPicture.classList.remove('hidden');
 
 function createBigPicture(photo) {
   bigPicture.querySelector('.big-picture__img').src = photo.url;
@@ -194,6 +180,8 @@ function createComment(element) {
 }
 
 function createCommentsList(array) {
+  commentsContainer.innerHTML = '';
+
   if (array.length === 0) {
     return;
   }
@@ -212,21 +200,60 @@ function createCommentsList(array) {
   }
 }
 
-var firstPhoto = photos[0];
 var commentCount = document.querySelector('.social__comment-count');
 var commentsLoader = document.querySelector('.comments-loader');
 
-// createBigPicture(firstPhoto);
-// createCommentsList(firstPhoto.comments);
 commentCount.classList.add('visually-hidden');
 commentsLoader.classList.add('visually-hidden');
 
+// Отрисовка сгенерированных DOM-элементов в блок, показ большого изображения при клике
+var bigPictureCloseBtn = bigPicture.querySelector('.big-picture__cancel');
+
+function openSetupBigPicture() {
+  document.querySelector('body').classList.add('modal-open');
+  bigPicture.classList.remove('hidden');
+  document.addEventListener('keydown', onBigPictureEscPress);
+}
+
+function closeSetupBigPicture() {
+  document.querySelector('body').classList.remove('modal-open');
+  bigPicture.classList.add('hidden');
+  document.removeEventListener('keydown', onBigPictureEscPress);
+}
+
+function onBigPictureEscPress(evt) {
+  // if (evt.keyCode === ESC_KEYCODE && commentField !== document.activeElement) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeSetupBigPicture();
+  }
+}
+
+function showFullscreenPicture(photo) {
+  return function () {
+    createBigPicture(photo);
+    commentsContainer.innerHTML = '';
+    createCommentsList(photo.comments);
+    openSetupBigPicture();
+  };
+}
+
+function renderPictures(photosArr) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < photosArr.length; i++) {
+    var createdPicture = createPicture(photosArr[i]);
+    createdPicture.addEventListener('click', showFullscreenPicture(photosArr[i]));
+    fragment.appendChild(createdPicture);
+  }
+  pictures.appendChild(fragment);
+}
+
+renderPictures(photos);
+
 // Загрузка изображения и показ формы редактирования
-var ESC_KEYCODE = 27;
 var uploadBtn = document.querySelector('.img-upload__input');
 var uploadWindow = document.querySelector('.img-upload__overlay');
 var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
-var uploadPreviewContainer = uploadWindow.querySelector('.img-upload__preview');
 var previewPhoto = document.querySelector('.img-upload__preview > img');
 
 function showEffectsPreviewPhotos(src) {
@@ -279,6 +306,7 @@ function openUploadWindow() {
 
 uploadBtn.addEventListener('change', openUploadWindow);
 uploadWindowClose.addEventListener('click', closeUploadWindow);
+bigPictureCloseBtn.addEventListener('click', closeSetupBigPicture);
 
 // Применение эффекта для изображения и Редактирование размера изображения
 var effectSlider = uploadWindow.querySelector('.effect-level');
