@@ -209,13 +209,13 @@ commentsLoader.classList.add('visually-hidden');
 // Отрисовка сгенерированных DOM-элементов в блок, показ большого изображения при клике
 var bigPictureCloseBtn = bigPicture.querySelector('.big-picture__cancel');
 
-function openSetupBigPicture() {
+function openBigPicture() {
   document.querySelector('body').classList.add('modal-open');
   bigPicture.classList.remove('hidden');
   document.addEventListener('keydown', onBigPictureEscPress);
 }
 
-function closeSetupBigPicture() {
+function closeBigPicture() {
   document.querySelector('body').classList.remove('modal-open');
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onBigPictureEscPress);
@@ -224,16 +224,18 @@ function closeSetupBigPicture() {
 function onBigPictureEscPress(evt) {
   //if (evt.keyCode === ESC_KEYCODE && commentField !== document.activeElement) {
   if (evt.keyCode === ESC_KEYCODE) {
-    closeSetupBigPicture();
+    closeBigPicture();
   }
 }
 
-function showFullscreenPicture(photo) {
+function onPhotoClick(photo) {
+  // Создание функции (вызывается сразу при задании через addEventListener)
   return function () {
+    // Выполняется позже (по клику)
     createBigPicture(photo);
     commentsContainer.innerHTML = '';
     createCommentsList(photo.comments);
-    openSetupBigPicture();
+    openBigPicture();
   };
 }
 
@@ -242,7 +244,7 @@ function renderPictures(photosArr) {
 
   for (var i = 0; i < photosArr.length; i++) {
     var createdPicture = createPicture(photosArr[i]);
-    createdPicture.addEventListener('click', showFullscreenPicture(photosArr[i]));
+    createdPicture.addEventListener('click', onPhotoClick(photosArr[i]));
     fragment.appendChild(createdPicture);
   }
   pictures.appendChild(fragment);
@@ -306,7 +308,7 @@ function openUploadWindow() {
 
 uploadBtn.addEventListener('change', openUploadWindow);
 uploadWindowClose.addEventListener('click', closeUploadWindow);
-bigPictureCloseBtn.addEventListener('click', closeSetupBigPicture);
+bigPictureCloseBtn.addEventListener('click', closeBigPicture);
 
 // Применение эффекта для изображения и Редактирование размера изображения
 var effectSlider = uploadWindow.querySelector('.effect-level');
