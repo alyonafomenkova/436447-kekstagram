@@ -148,7 +148,7 @@ var Comment = {
 var MAX_COMMENTS_VIEW_NUMBER = 5;
 
 function createBigPicture(photo) {
-  bigPicture.querySelector('.big-picture__img').src = photo.url;
+  bigPicture.querySelector('.big-picture__img > img').src = photo.url;
   bigPicture.querySelector('.likes-count').textContent = photo.likes;
   bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
   bigPicture.querySelector('.social__caption').textContent = photo.description;
