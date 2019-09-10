@@ -257,6 +257,61 @@ var uploadBtn = document.querySelector('.img-upload__input');
 var uploadWindow = document.querySelector('.img-upload__overlay');
 var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
 var previewPhoto = document.querySelector('.img-upload__preview > img');
+var hashtagInput = uploadWindow.querySelector('.text__hashtags');
+var HASHTAG = {
+  pattern: /^#[А-Яа-яЁёA-Za-z]{1,19}$/,
+  // ^# - не символ #
+  // [А-Яа-яЁёA-Za-z] - любая буква независимо от регистра и языка
+  // $ - регулярными выражениями, следует искать только в конце строки
+  maxCount: 5
+};
+var VALIDITY_MESSAGES = {
+  tooManyHashtags: 'Нельзя указывать больше 5 хэш-тегов',
+  notUnique: 'Один и тот же хэш-тег не может быть использован дважды',
+  brokenPattern: 'Убедитесь, что: хэш-теги начинаются с #, длинна хэш-тегов не больше 20 символов, хэш-теги разделены пробелами.'
+};
+
+function convertStringIntoArray(field) {
+  return field.value.split(' ');
+}
+
+function checkElementsInArray(array, pattern) {
+  var counter = true;
+  for (var i = 0; i < array.length; i++) {
+    if (!pattern.test(array[i])) {
+      counter = false;
+    }
+  }
+  return counter;
+}
+
+function deleteSimilarElementsInArray(array) {
+  var object = {};
+  for (var i = 0; i < array.length; i++) {
+    var str = array[i].toLowerCase();
+    object[str] = true;
+  }
+  return Object.keys(object);
+}
+
+hashtagInput.addEventListener('input', function (evt) {
+  var hashtagsArray = convertStringIntoArray(hashtagInput);
+  var target = evt.target;
+
+  if (hashtagsArray.length > HASHTAG.maxCount) {
+    target.setCustomValidity(VALIDITY_MESSAGES.tooManyHashtags);
+  } else if (!checkElementsInArray(hashtagsArray, HASHTAG.pattern)) {
+    target.setCustomValidity(VALIDITY_MESSAGES.brokenPattern);
+  } else if (hashtagsArray.length !== deleteSimilarElementsInArray(hashtagsArray).length) {
+    target.setCustomValidity(VALIDITY_MESSAGES.notUnique);
+  } else {
+    target.setCustomValidity('');
+  }
+  if (hashtagInput.value === '') {
+    target.setCustomValidity('');
+  }
+});
+
 
 function showEffectsPreviewPhotos(src) {
   var effectsPreviewList = uploadWindow.querySelectorAll('.effects__preview');
