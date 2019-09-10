@@ -208,6 +208,7 @@ commentsLoader.classList.add('visually-hidden');
 
 // Отрисовка сгенерированных DOM-элементов в блок, показ большого изображения при клике
 var bigPictureCloseBtn = bigPicture.querySelector('.big-picture__cancel');
+var commentInput = bigPicture.querySelector('.social__footer-text');
 
 function openBigPicture() {
   document.querySelector('body').classList.add('modal-open');
@@ -222,8 +223,7 @@ function closeBigPicture() {
 }
 
 function onBigPictureEscPress(evt) {
-  //if (evt.keyCode === ESC_KEYCODE && commentField !== document.activeElement) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === ESC_KEYCODE && commentInput !== document.activeElement) {
     closeBigPicture();
   }
 }
