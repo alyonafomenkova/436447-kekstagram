@@ -366,13 +366,9 @@ uploadWindowClose.addEventListener('click', closeUploadWindow);
 bigPictureCloseBtn.addEventListener('click', closeBigPicture);
 
 // Применение эффекта для изображения и Редактирование размера изображения
+var FIRST_PART_OF_CLASSNAME = 'effects__preview--';
 var effectSlider = uploadWindow.querySelector('.effect-level');
-var noEffect = uploadWindow.querySelector('.effects__preview--none');
-var chromeEffect = uploadWindow.querySelector('.effects__preview--chrome');
-var sepiaEffect = uploadWindow.querySelector('.effects__preview--sepia');
-var marvinEffect = uploadWindow.querySelector('.effects__preview--marvin');
-var phobosEffect = uploadWindow.querySelector('.effects__preview--phobos');
-var heatEffect = uploadWindow.querySelector('.effects__preview--heat');
+var effectsList = uploadWindow.querySelector('.effects__list');
 
 function clearClassList(element) {
   var classList = element.classList;
@@ -382,41 +378,10 @@ function clearClassList(element) {
   }
 }
 
-function applyEffects() {
-  noEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.add('visually-hidden');
-  });
-
-  chromeEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.remove('visually-hidden');
-    previewPhoto.classList.add('effects__preview--chrome');
-  });
-
-  sepiaEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.remove('visually-hidden');
-    previewPhoto.classList.add('effects__preview--sepia');
-  });
-
-  marvinEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.remove('visually-hidden');
-    previewPhoto.classList.add('effects__preview--marvin');
-  });
-
-  phobosEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.remove('visually-hidden');
-    previewPhoto.classList.add('effects__preview--phobos');
-  });
-
-  heatEffect.addEventListener('click', function () {
-    clearClassList(previewPhoto);
-    effectSlider.classList.remove('visually-hidden');
-    previewPhoto.classList.add('effects__preview--heat');
-  });
-}
-
-applyEffects();
+effectsList.addEventListener('click', function (evt) {
+  var target = evt.target;
+  var className = FIRST_PART_OF_CLASSNAME + target.value;
+  effectSlider.style.display = className === 'effects__preview--none' ? 'none' : 'block';
+  clearClassList(previewPhoto);
+  previewPhoto.classList.add(className);
+});
