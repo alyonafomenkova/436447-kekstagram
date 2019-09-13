@@ -480,7 +480,7 @@ effectLevelPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 });
 
-// Применение эффекта для изображения и Редактирование размера изображения
+// Применение эффекта для изображения
 var FIRST_PART_OF_CLASSNAME = 'effects__preview--';
 var effectSlider = uploadWindow.querySelector('.effect-level');
 var effectsList = uploadWindow.querySelector('.effects__list');
@@ -509,4 +509,36 @@ effectsList.addEventListener('click', function (evt) {
   previewPhoto.style.filter = getFilterValue(1);
   effectLevelPin.style.left = setPinPosition(1, effectLevelBlock);
   effectDepth.style.width = setPinPosition(1, effectLevelBlock);
+});
+
+// Изменение масштаба изображения
+var zoomOutBtn = uploadWindow.querySelector('.scale__control--smaller');
+var zoomInBtn = uploadWindow.querySelector('.scale__control--bigger');
+var scaleInput = uploadWindow.querySelector('.scale__control--value');
+var ZOOM_STEP = 25;
+var ZOOM_MIN = 25;
+var ZOOM_MAX = 100;
+
+function setScaleValue(number) {
+  scaleInput.setAttribute('value', number + '%');
+}
+
+setScaleValue(ZOOM_MAX);
+
+zoomOutBtn.addEventListener('click', function () {
+  var currentScaleValue = scaleInput.value.substring(0, scaleInput.value.length - 1);
+  if (currentScaleValue > ZOOM_MIN) {
+    var newScaleValue = currentScaleValue - ZOOM_STEP;
+    setScaleValue(newScaleValue);
+    previewPhoto.style.transform = 'scale(' + (newScaleValue / 100).toFixed(2) + ')';
+  }
+});
+
+zoomInBtn.addEventListener('click', function () {
+  var currentScaleValue = scaleInput.value.substring(0, scaleInput.value.length - 1);
+  if (currentScaleValue < ZOOM_MAX) {
+    var newScaleValue = Number(currentScaleValue) + Number(ZOOM_STEP);
+    setScaleValue(newScaleValue);
+    previewPhoto.style.transform = 'scale(' + (newScaleValue / 100).toFixed(2) + ')';
+  }
 });
