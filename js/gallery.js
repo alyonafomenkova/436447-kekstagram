@@ -26,5 +26,11 @@
     pictures.appendChild(fragment);
   }
 
-  renderPictures(photos);
+  //renderPictures(photos);
+
+  function onSuccessLoading(photos) {
+    renderPictures(photos);
+  }
+
+  window.backend.load(onSuccessLoading, window.backend.onError); // загрузка данных с сервера
 })();
