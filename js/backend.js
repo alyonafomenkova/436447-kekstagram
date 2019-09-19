@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
-  var URL_SAVE = 'https://js.dump.academy/kekstagram';
+  var URL_LOAD = 'https://js.dump.academy/kekstagram/data1';
+  // var URL_SAVE = 'https://js.dump.academy/kekstagram';
   var REQUEST_TIMEOUT = 10000;
   var RequestStatuses = {
     OK: 200,
@@ -14,7 +14,7 @@
     SERVER: 500
   };
 
-  function onError(error) {
+  function onErrorLoading(error) {
     var mainBlock = document.querySelector('main');
     var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorMessageTemplate.cloneNode(true);
@@ -65,9 +65,9 @@
 
     xhr.open('GET', URL_LOAD); // Инициализируем запрос: указываем метод и URL
     xhr.send(); // Отсылаем запрос
-  };
+  }
   window.backend = {
     load: load,
-    onError: onError
+    onErrorLoading: onErrorLoading
   };
 })();

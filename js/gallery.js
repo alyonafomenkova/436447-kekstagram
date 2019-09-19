@@ -32,5 +32,5 @@
     renderPictures(photos);
   }
 
-  window.backend.load(onSuccessLoading, window.backend.onError); // загрузка данных с сервера
+  window.backend.load(onSuccessLoading, window.backend.onErrorLoading); // загрузка данных с сервера
 })();
