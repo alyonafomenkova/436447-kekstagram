@@ -11,13 +11,19 @@
     }
   }
 
+  function showError() {
+    var overlayBlock = document.querySelector('.img-upload__overlay');
+    var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorElement = errorMessageTemplate.cloneNode(true);
+    overlayBlock.appendChild(errorElement); // TODO: добавить закрытие окна и обработчики на кнопки повторной загрузки фото
+  }
+
   function showPreviewPhoto() {
     var selectedImg = document.querySelector('input[type=file]').files[0];
     var reader = new FileReader();
 
     if (!selectedImg.type.startsWith('image/')) {
-      console.log('Не картинка'); // TODO: Добавить сообщение об ошибке, если пользователь загружает не картинку
-      return;
+      showError();
     }
 
     reader.onloadend = function () {

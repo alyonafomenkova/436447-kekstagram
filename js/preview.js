@@ -28,9 +28,9 @@
   function createComment(element) {
     var listItem = window.utils.createElement('li', Comment.CLASS);
     var image = window.utils.createElement('img', Comment.IMG_CLASS);
-    var text = window.utils.createElement('p', Comment.TEXT_CLASS, element);
+    var text = window.utils.createElement('p', Comment.TEXT_CLASS, element.message);
 
-    image.src = window.utils.getRandomElement(window.data.avatars);
+    image.src = element.avatar;
     image.alt = Comment.IMG_ALT;
     image.width = Comment.IMG_WIDTH;
     image.height = Comment.IMG_HEIGHT;
@@ -41,23 +41,10 @@
   }
 
   function createCommentsList(array) {
-    commentsContainer.innerHTML = '';
-
-    if (array.length === 0) {
-      return;
-    }
     var commentItem;
-
-    if (array.length > MAX_COMMENTS_VIEW_NUMBER) {
-      for (var i = 0; i < MAX_COMMENTS_VIEW_NUMBER; i++) {
-        commentItem = createComment(array[i].message);
-        commentsContainer.appendChild(commentItem);
-      }
-    } else {
-      for (var j = 0; j < array.length; j++) {
-        commentItem = createComment(array[j].message);
-        commentsContainer.appendChild(commentItem);
-      }
+    for (var i = 0; i < array.length && i < MAX_COMMENTS_VIEW_NUMBER; i++) {
+      commentItem = createComment(array[i]);
+      commentsContainer.appendChild(commentItem);
     }
   }
 
