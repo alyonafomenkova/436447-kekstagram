@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
+  var URL_LOAD = 'https://js.dump.academy/kekstagram/data1';
   // var URL_SAVE = 'https://js.dump.academy/kekstagram';
   var REQUEST_TIMEOUT = 10000;
   var RequestStatuses = {
@@ -18,8 +18,14 @@
     var mainBlock = document.querySelector('main');
     var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorMessageTemplate.cloneNode(true);
-    errorElement.textContent = error;
+    var errorTitle = errorElement.querySelector('.error__title');
+    errorTitle.textContent = error;
     mainBlock.appendChild(errorElement);
+    document.querySelector(".error__button").addEventListener('click', function(evt) {
+      evt.preventDefault();
+      window.utils.closeErrorPage();
+    });
+    document.addEventListener('keydown', window.utils.onErrorPageEscPress);
   }
 
   function load(onSuccess, onError) {

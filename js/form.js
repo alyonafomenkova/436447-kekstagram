@@ -55,6 +55,7 @@
   }
 
   function openUploadWindow() {
+    document.querySelector(".img-upload__overlay").classList.remove("hidden");
     window.upload.showPreviewPhoto();
     window.upload.showEffectsPreviewPhotos();
     window.form.uploadWindow.classList.remove('hidden');
