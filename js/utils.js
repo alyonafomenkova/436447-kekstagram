@@ -45,6 +45,17 @@
     }
   }
 
+  function closeSuccessPage() {
+    document.querySelector(".success").remove();
+    document.removeEventListener('keydown', onSuccessPageEscPress);
+  }
+
+  function onSuccessPageEscPress(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closeSuccessPage();
+    }
+  }
+
   window.utils = {
     ESC_KEYCODE: ESC_KEYCODE,
     getRandomInteger: getRandomInteger,
@@ -52,6 +63,8 @@
     shuffleArray: shuffleArray,
     createElement: createElement,
     closeErrorPage: closeErrorPage,
-    onErrorPageEscPress: onErrorPageEscPress
+    onErrorPageEscPress: onErrorPageEscPress,
+    closeSuccessPage: closeSuccessPage,
+    onSuccessPageEscPress: onSuccessPageEscPress
   };
 })();

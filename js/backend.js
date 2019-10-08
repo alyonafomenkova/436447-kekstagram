@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  var URL_LOAD = 'https://js.dump.academy/kekstagram/data1';
-  // var URL_SAVE = 'https://js.dump.academy/kekstagram';
-  var REQUEST_TIMEOUT = 10000;
+  var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
+  var URL_SAVE = 'https://js.dump.academy/kekstagram';
+  var REQUEST_TIMEOUT = 100000;
   var RequestStatuses = {
     OK: 200,
     MOVED_PERMANENTLY: 301,
@@ -28,7 +28,7 @@
     document.addEventListener('keydown', window.utils.onErrorPageEscPress);
   }
 
-  function load(onSuccess, onError) {
+  function createRequest(onSuccess, onError) {
     var xhr = new XMLHttpRequest(); // Создаём новый XMLHttpRequest-объект
     xhr.responseType = 'json'; // В ответе ожидаем JSON (парсится автоматически)
     xhr.timeout = REQUEST_TIMEOUT; // готовы ждать ответ от сервера 10s
@@ -54,7 +54,7 @@
           onError('Запрашиваемая Вами страница не найдена. ' + 'Код ошибки: ' + xhr.status);
           break;
         case RequestStatuses.SERVER:
-          onError('Извините, небольшие неполадки с сервером. Приходите завтра. ' + 'Код ошибки: ' + xhr.status);// может быть xhr.statusText ?
+          onError('Извините, небольшие неполадки с сервером. Приходите завтра. ' + 'Код ошибки: ' + xhr.status);
           break;
         default:
           onError('Что-то пошло не так... ' + 'код ошибки: ' + xhr.status);
@@ -68,12 +68,26 @@
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     }); // запрос не успел выполниться за установленный таймаут
+    return xhr;
+  }
 
+  function load(onSuccess, onError) {
+    var xhr = createRequest(onSuccess, onError)
     xhr.open('GET', URL_LOAD); // Инициализируем запрос: указываем метод и URL
     xhr.send(); // Отсылаем запрос
   }
+
+  function save(data, onSuccess, onError) {
+    // data - объект с данными, которые необходим отправить
+    // onSuccess - функция обратного вызова, которая будет вызываться каждый раз, когда данные отправлены успешно.
+    var xhr = createRequest(onSuccess, onError)
+    xhr.open('POST', URL_SAVE);
+    xhr.send(data);
+  }
+
   window.backend = {
     load: load,
-    onErrorLoading: onErrorLoading
+    onErrorLoading: onErrorLoading,
+    save: save
   };
 })();
