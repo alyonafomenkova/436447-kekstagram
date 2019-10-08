@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var photos = window.data.generatePhotos(window.data.NUMBER_OF_PHOTOS);
   var pictures = document.querySelector('.pictures');
 
   function onPhotoClick(photo) {
@@ -26,5 +25,9 @@
     pictures.appendChild(fragment);
   }
 
-  renderPictures(photos);
+  function onSuccessLoading(photos) {
+    renderPictures(photos);
+  }
+
+  window.backend.load(onSuccessLoading, window.backend.onErrorLoading); // загрузка данных с сервера
 })();

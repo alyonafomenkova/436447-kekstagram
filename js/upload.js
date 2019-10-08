@@ -11,13 +11,27 @@
     }
   }
 
+  function showError() {
+    var overlayBlock = document.querySelector('.img-upload__overlay');
+    var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorElement = errorMessageTemplate.cloneNode(true);
+    var errorTitle = errorElement.querySelector('.error__title');
+    errorTitle.textContent = "Ошибка в формате. Пожалуйста, попробуйте загрузить другое фото.";
+    overlayBlock.appendChild(errorElement);
+    document.querySelector(".error__button").addEventListener('click', function(evt) {
+      evt.preventDefault();
+      document.querySelector(".img-upload__overlay").classList.add("hidden");
+      window.utils.closeErrorPage();
+    });
+    document.addEventListener('keydown', window.utils.onErrorPageEscPress);
+  }
+
   function showPreviewPhoto() {
     var selectedImg = document.querySelector('input[type=file]').files[0];
     var reader = new FileReader();
 
     if (!selectedImg.type.startsWith('image/')) {
-      console.log('Не картинка'); // TODO: Добавить сообщение об ошибке, если пользователь загружает не картинку
-      return;
+      showError();
     }
 
     reader.onloadend = function () {

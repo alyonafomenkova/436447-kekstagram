@@ -33,11 +33,38 @@
     return element;
   }
 
+
+  function closeErrorPage() {
+    document.querySelector(".error").remove();
+    document.removeEventListener('keydown', onErrorPageEscPress);
+  }
+
+  function onErrorPageEscPress(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closeErrorPage();
+    }
+  }
+
+  function closeSuccessPage() {
+    document.querySelector(".success").remove();
+    document.removeEventListener('keydown', onSuccessPageEscPress);
+  }
+
+  function onSuccessPageEscPress(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closeSuccessPage();
+    }
+  }
+
   window.utils = {
     ESC_KEYCODE: ESC_KEYCODE,
     getRandomInteger: getRandomInteger,
     getRandomElement: getRandomElement,
     shuffleArray: shuffleArray,
-    createElement: createElement
+    createElement: createElement,
+    closeErrorPage: closeErrorPage,
+    onErrorPageEscPress: onErrorPageEscPress,
+    closeSuccessPage: closeSuccessPage,
+    onSuccessPageEscPress: onSuccessPageEscPress
   };
 })();
