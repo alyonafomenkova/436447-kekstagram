@@ -2,6 +2,7 @@
 
 (function () {
   var pictures = document.querySelector('.pictures');
+  var loadedPhotos = [];
 
   function onPhotoClick(photo) {
     // Создание функции (вызывается сразу при задании через addEventListener)
@@ -26,7 +27,10 @@
   }
 
   function onSuccessLoading(photos) {
+    loadedPhotos = photos;
+    console.log('loadedPhotos: ', loadedPhotos);
     renderPictures(photos);
+    window.filter.showFilters();
   }
 
   window.backend.load(onSuccessLoading, window.backend.onErrorLoading); // загрузка данных с сервера

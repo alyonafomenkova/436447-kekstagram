@@ -16,11 +16,11 @@
     var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorMessageTemplate.cloneNode(true);
     var errorTitle = errorElement.querySelector('.error__title');
-    errorTitle.textContent = "Ошибка в формате. Пожалуйста, попробуйте загрузить другое фото.";
+    errorTitle.textContent = 'Ошибка в формате. Пожалуйста, попробуйте загрузить другое фото.';
     overlayBlock.appendChild(errorElement);
-    document.querySelector(".error__button").addEventListener('click', function(evt) {
+    document.querySelector('.error__button').addEventListener('click', function (evt) {
       evt.preventDefault();
-      document.querySelector(".img-upload__overlay").classList.add("hidden");
+      document.querySelector('.img-upload__overlay').classList.add('hidden');
       window.utils.closeErrorPage();
     });
     document.addEventListener('keydown', window.utils.onErrorPageEscPress);

@@ -8,7 +8,7 @@
     // $ - регулярными выражениями, следует искать только в конце строки
     maxCount: 5
   };
-  var VALIDITY_MESSAGES = {
+  var ValidityMessage = {
     tooManyHashtags: 'Нельзя указывать больше 5 хэш-тегов',
     notUnique: 'Один и тот же хэш-тег не может быть использован дважды',
     brokenPattern: 'Убедитесь, что: хэш-теги начинаются с #, длинна хэш-тегов не больше 20 символов, хэш-теги разделены пробелами.'
@@ -18,7 +18,7 @@
   var uploadWindowClose = uploadWindow.querySelector('.img-upload__cancel');
   var hashtagInput = uploadWindow.querySelector('.text__hashtags');
   var commanetInput = uploadWindow.querySelector('.text__description');
-  var form = document.querySelector(".img-upload__form");
+  var form = document.querySelector('.img-upload__form');
 
   function convertStringIntoArray(field) {
     return field.value.split(' ');
@@ -56,7 +56,7 @@
   }
 
   function openUploadWindow() {
-    document.querySelector(".img-upload__overlay").classList.remove("hidden");
+    document.querySelector('.img-upload__overlay').classList.remove('hidden');
     window.upload.showPreviewPhoto();
     window.upload.showEffectsPreviewPhotos();
     window.form.uploadWindow.classList.remove('hidden');
@@ -83,11 +83,11 @@
     mainBlock.appendChild(successWindow);
   }
 
-  function onPostSuccess () {
+  function onPostSuccess() {
     uploadWindow.classList.add('hidden');
     resetInput();
     showSuccessWindow();
-    document.querySelector(".success__button").addEventListener('click', function(evt) {
+    document.querySelector('.success__button').addEventListener('click', function (evt) {
       evt.preventDefault();
       window.utils.closeSuccessPage();
     });
@@ -99,11 +99,11 @@
     var target = evt.target;
 
     if (hashtagsArray.length > HASHTAG.maxCount) {
-      target.setCustomValidity(VALIDITY_MESSAGES.tooManyHashtags);
+      target.setCustomValidity(ValidityMessage.tooManyHashtags);
     } else if (!checkElementsInArray(hashtagsArray, HASHTAG.pattern)) {
-      target.setCustomValidity(VALIDITY_MESSAGES.brokenPattern);
+      target.setCustomValidity(ValidityMessage.brokenPattern);
     } else if (hashtagsArray.length !== deleteSimilarElementsInArray(hashtagsArray).length) {
-      target.setCustomValidity(VALIDITY_MESSAGES.notUnique);
+      target.setCustomValidity(ValidityMessage.notUnique);
     } else {
       target.setCustomValidity('');
     }
@@ -114,7 +114,7 @@
   uploadBtn.addEventListener('change', openUploadWindow);
   uploadWindowClose.addEventListener('click', closeUploadWindow);
 
-  form.addEventListener('submit', function(evt) {
+  form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), onPostSuccess, window.backend.onErrorLoading);
     evt.preventDefault();
   });
