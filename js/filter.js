@@ -63,8 +63,8 @@
     Filter.DISCUSSED.addEventListener('click', onDiscussedFilterClick);
   }
 
-  window.gallery.setOnCompleteListener(function() {
-    showFilters()
+  window.gallery.setOnCompleteCallback(function() {
+    showFilters();
   })
 
   window.filter = {

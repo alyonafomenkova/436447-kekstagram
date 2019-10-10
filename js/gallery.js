@@ -3,10 +3,10 @@
 (function () {
   var pictures = document.querySelector('.pictures');
   var loadedPhotos = [];
-  var completeListener = function() {};
+  var completeCallback = function() {};
 
-  function setOnCompleteListener(listener) {
-    completeListener = listener;
+  function setOnCompleteCallback(listener) {
+    completeCallback = listener; // Задаём функцию (код) извне, который будет выполняться в onSuccessLoading
   }
 
   function getLoadedPhotos() {
@@ -45,12 +45,12 @@
   function onSuccessLoading(photos) {
     loadedPhotos = photos;
     renderPictures(photos);
-    completeListener();
+    completeCallback();
   }
 
   window.gallery = {
     loadedPhotos: loadedPhotos,
-    setOnCompleteListener: setOnCompleteListener,
+    setOnCompleteCallback: setOnCompleteCallback,
     getLoadedPhotos: getLoadedPhotos,
     renderPictures: renderPictures,
     clearPictures: clearPictures
