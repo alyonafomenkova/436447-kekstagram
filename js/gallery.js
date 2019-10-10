@@ -3,6 +3,15 @@
 (function () {
   var pictures = document.querySelector('.pictures');
   var loadedPhotos = [];
+  var completeListener = function() {};
+
+  function setOnCompleteListener(listener) {
+    completeListener = listener;
+  }
+
+  function getLoadedPhotos() {
+    return loadedPhotos;
+  }
 
   function onPhotoClick(photo) {
     // Создание функции (вызывается сразу при задании через addEventListener)
@@ -26,12 +35,26 @@
     pictures.appendChild(fragment);
   }
 
+  function clearPictures() {
+    var photosList = pictures.querySelectorAll('.picture');
+    photosList.forEach(function(item) {
+      pictures.removeChild(item);
+    });
+  }
+
   function onSuccessLoading(photos) {
     loadedPhotos = photos;
-    console.log('loadedPhotos: ', loadedPhotos);
     renderPictures(photos);
-    window.filter.showFilters();
+    completeListener();
   }
+
+  window.gallery = {
+    loadedPhotos: loadedPhotos,
+    setOnCompleteListener: setOnCompleteListener,
+    getLoadedPhotos: getLoadedPhotos,
+    renderPictures: renderPictures,
+    clearPictures: clearPictures
+  };
 
   window.backend.load(onSuccessLoading, window.backend.onErrorLoading); // загрузка данных с сервера
 })();

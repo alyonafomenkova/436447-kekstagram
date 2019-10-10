@@ -86,6 +86,7 @@
   }
 
   window.backend = {
+    REQUEST_TIMEOUT: REQUEST_TIMEOUT,
     load: load,
     onErrorLoading: onErrorLoading,
     save: save
