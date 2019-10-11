@@ -34,29 +34,29 @@
     return filteredArray;
   }
 
-  function onPopularFilterClick(evt) {
+  var onPopularFilterClick = window.debounce(function (evt) {
     var photos = window.gallery.getLoadedPhotos();
     changeClass(evt.target);
     window.gallery.clearPictures();
     var popularPhotos = applyPopularFilter(photos);
     window.gallery.renderPictures(popularPhotos);
-  }
+  });
 
-  function onNewFilterClick(evt) {
+  var onNewFilterClick = window.debounce(function (evt) {
     var photos = window.gallery.getLoadedPhotos();
     var newPhotos = applyNewFilter(photos);
     changeClass(evt.target);
     window.gallery.clearPictures();
     window.gallery.renderPictures(newPhotos);
-  }
+  });
 
-  function onDiscussedFilterClick(evt) {
+  var onDiscussedFilterClick = window.debounce(function (evt) {
     var photos = window.gallery.getLoadedPhotos();
     var discussedPhotos = applyDiscussedFilter(photos);
     changeClass(evt.target);
     window.gallery.clearPictures();
     window.gallery.renderPictures(discussedPhotos);
-  }
+  });
 
   function showFilters() {
     filtersBlock.classList.remove('img-filters--inactive');
