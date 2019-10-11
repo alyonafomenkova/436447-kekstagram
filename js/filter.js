@@ -27,9 +27,11 @@
   }
 
   function applyDiscussedFilter(photos) {
-    console.log('photos: ', photos);
     var filteredArray = photos.slice();
-    return filteredArray.slice(0, 2);
+    filteredArray.sort(function(a, b) {
+      return b.comments.length - a.comments.length;
+    });
+    return filteredArray;
   }
 
   function onPopularFilterClick(evt) {
