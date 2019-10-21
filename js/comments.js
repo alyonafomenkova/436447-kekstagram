@@ -1,18 +1,20 @@
 'use strict';
 
 (function () {
-  var MAX_COMMENTS_VIEW_NUMBER = 5;
+  var COMMENTS_STEP = 5;
+  var offset = 0;
   var Comment = {
     CLASS: 'social__comment',
     IMG_CLASS: 'social__picture',
     TEXT_CLASS: 'social__text',
     IMG_ALT: 'Аватар комментатора фотографии',
     IMG_WIDTH: 35,
-    IMG_HEIGHT: 35
+    IMG_HEIGHT: 35,
   };
   var commentsContainer = document.querySelector('.social__comments');
   var commentCount = document.querySelector('.social__comment-count');
   var commentsLoader = document.querySelector('.comments-loader');
+  var allComments = [];
 
   function createComment(element) {
     var listItem = window.utils.createElement('li', Comment.CLASS);
@@ -29,19 +31,42 @@
     return listItem;
   }
 
-  function createCommentsList(array) {
-    var commentItem;
-    for (var i = 0; i < array.length && i < MAX_COMMENTS_VIEW_NUMBER; i++) {
-      commentItem = createComment(array[i]);
-      commentsContainer.appendChild(commentItem);
-    }
+  function onCommentsLoaded(comments) {
+    allComments = comments;
   }
 
-  commentCount.classList.add('visually-hidden');
-  commentsLoader.classList.add('visually-hidden');
+  function loadMore(count) {
+    var from = offset;
+    var to = offset + count;
+
+    if (to >= allComments.length) {
+      to = allComments.length - 1;
+    }
+
+    if (from > allComments.length) {
+      return;
+    }
+
+    for (var i = from; i <= to; i++) {
+      var commentItem = createComment(allComments[i]);
+      commentsContainer.appendChild(commentItem);
+    }
+    offset += count + 1;
+  }
+
+  //commentCount.classList.add('visually-hidden');
+  //commentsLoader.classList.add('visually-hidden');
+
+  function onCommentsLoaderClick () {
+    loadMore(COMMENTS_STEP);
+  }
+
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 
   window.comments = {
+    COMMENTS_STEP: COMMENTS_STEP,
     commentsContainer: commentsContainer,
-    createCommentsList: createCommentsList,
+    onCommentsLoaded: onCommentsLoaded,
+    loadMore: loadMore
   };
 })();

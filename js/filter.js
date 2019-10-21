@@ -68,8 +68,4 @@
   window.gallery.setOnCompleteCallback(function() {
     showFilters();
   })
-
-  window.filter = {
-    showFilters: showFilters,
-  };
 })();

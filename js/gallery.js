@@ -17,9 +17,12 @@
     // Создание функции (вызывается сразу при задании через addEventListener)
     return function () {
       // Выполняется позже (по клику)
+      console.log("Total comments: " + photo.comments.length);
+      console.log(photo.comments);
       window.preview.createBigPicture(photo);
       window.comments.commentsContainer.innerHTML = '';
-      window.comments.createCommentsList(photo.comments);
+      window.comments.onCommentsLoaded(photo.comments);
+      window.comments.loadMore(window.comments.COMMENTS_STEP);
       window.preview.openBigPicture();
     };
   }
