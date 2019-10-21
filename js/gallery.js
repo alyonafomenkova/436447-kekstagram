@@ -18,8 +18,8 @@
     return function () {
       // Выполняется позже (по клику)
       window.preview.createBigPicture(photo);
-      window.preview.commentsContainer.innerHTML = '';
-      window.preview.createCommentsList(photo.comments);
+      window.comments.commentsContainer.innerHTML = '';
+      window.comments.createCommentsList(photo.comments);
       window.preview.openBigPicture();
     };
   }
