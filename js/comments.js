@@ -12,9 +12,15 @@
     IMG_HEIGHT: 35,
   };
   var commentsContainer = document.querySelector('.social__comments');
-  var commentCount = document.querySelector('.social__comment-count');
+  var commentCountBlock = document.querySelector('.social__comment-count');
   var commentsLoader = document.querySelector('.comments-loader');
   var allComments = [];
+  var loadedCommentsNumber = 0;
+
+  function updateCommentsNumber(number) {
+    commentCountBlock.firstChild.textContent = '';
+    commentCountBlock.firstChild.textContent = number;
+  }
 
   function createComment(element) {
     var listItem = window.utils.createElement('li', Comment.CLASS);
@@ -33,11 +39,15 @@
 
   function onCommentsLoaded(comments) {
     allComments = comments;
+    commentsContainer.innerHTML = '';
+    offset = 0;
+    loadedCommentsNumber = 0;
+    commentsLoader.classList.remove('visually-hidden');
   }
 
-  function loadMore(count) {
+  function loadMoreComments(count) {
     var from = offset;
-    var to = offset + count;
+    var to = offset + count - 1;
 
     if (to >= allComments.length) {
       to = allComments.length - 1;
@@ -50,15 +60,19 @@
     for (var i = from; i <= to; i++) {
       var commentItem = createComment(allComments[i]);
       commentsContainer.appendChild(commentItem);
+      loadedCommentsNumber += 1;
     }
-    offset += count + 1;
+
+    if (loadedCommentsNumber === allComments.length) {
+      commentsLoader.classList.add('visually-hidden');
+    }
+
+    offset += count;
+    updateCommentsNumber(loadedCommentsNumber);
   }
 
-  //commentCount.classList.add('visually-hidden');
-  //commentsLoader.classList.add('visually-hidden');
-
-  function onCommentsLoaderClick () {
-    loadMore(COMMENTS_STEP);
+  function onCommentsLoaderClick() {
+    loadMoreComments(COMMENTS_STEP);
   }
 
   commentsLoader.addEventListener('click', onCommentsLoaderClick);
@@ -67,6 +81,6 @@
     COMMENTS_STEP: COMMENTS_STEP,
     commentsContainer: commentsContainer,
     onCommentsLoaded: onCommentsLoaded,
-    loadMore: loadMore
+    loadMoreComments: loadMoreComments
   };
 })();
