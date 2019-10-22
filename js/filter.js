@@ -10,8 +10,10 @@
 
   function changeClass(target) {
     for (var key in Filter) {
-      var item = Filter[key];
-      item.classList.remove('img-filters__button--active');
+      if (Object.prototype.hasOwnProperty.call(Filter, key)) {
+        var item = Filter[key];
+        item.classList.remove('img-filters__button--active');
+      }
     }
     target.classList.add('img-filters__button--active');
   }
@@ -28,7 +30,7 @@
 
   function applyDiscussedFilter(photos) {
     var filteredArray = photos.slice();
-    filteredArray.sort(function(a, b) {
+    filteredArray.sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
     return filteredArray;
@@ -65,7 +67,7 @@
     Filter.DISCUSSED.addEventListener('click', onDiscussedFilterClick);
   }
 
-  window.gallery.setOnCompleteCallback(function() {
+  window.gallery.setOnCompleteCallback(function () {
     showFilters();
-  })
+  });
 })();

@@ -3,7 +3,7 @@
 (function () {
   var pictures = document.querySelector('.pictures');
   var loadedPhotos = [];
-  var completeCallback = function() {};
+  var completeCallback = function () {};
 
   function setOnCompleteCallback(listener) {
     completeCallback = listener; // Задаём функцию (код) извне, который будет выполняться в onSuccessLoading
@@ -17,12 +17,10 @@
     // Создание функции (вызывается сразу при задании через addEventListener)
     return function () {
       // Выполняется позже (по клику)
-      console.log("Total comments: " + photo.comments.length);
-      console.log(photo.comments);
       window.preview.createBigPicture(photo);
       window.comments.commentsContainer.innerHTML = '';
       window.comments.onCommentsLoaded(photo.comments);
-      window.comments.loadMore(window.comments.COMMENTS_STEP);
+      window.comments.loadMoreComments(window.comments.COMMENTS_STEP);
       window.preview.openBigPicture();
     };
   }
@@ -40,7 +38,7 @@
 
   function clearPictures() {
     var photosList = pictures.querySelectorAll('.picture');
-    photosList.forEach(function(item) {
+    photosList.forEach(function (item) {
       pictures.removeChild(item);
     });
   }
