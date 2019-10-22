@@ -35,7 +35,7 @@
 
 
   function closeErrorPage() {
-    document.querySelector(".error").remove();
+    document.querySelector('.error').remove();
     document.removeEventListener('keydown', onErrorPageEscPress);
   }
 
@@ -46,7 +46,7 @@
   }
 
   function closeSuccessPage() {
-    document.querySelector(".success").remove();
+    document.querySelector('.success').remove();
     document.removeEventListener('keydown', onSuccessPageEscPress);
   }
 

@@ -3,8 +3,8 @@
 (function () {
   var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
   var URL_SAVE = 'https://js.dump.academy/kekstagram';
-  var REQUEST_TIMEOUT = 100000;
-  var RequestStatuses = {
+  var REQUEST_TIMEOUT = 10000;
+  var RequestStatus = {
     OK: 200,
     MOVED_PERMANENTLY: 301,
     FOUND: 302,
@@ -21,7 +21,7 @@
     var errorTitle = errorElement.querySelector('.error__title');
     errorTitle.textContent = error;
     mainBlock.appendChild(errorElement);
-    document.querySelector(".error__button").addEventListener('click', function(evt) {
+    document.querySelector('.error__button').addEventListener('click', function (evt) {
       evt.preventDefault();
       window.utils.closeErrorPage();
     });
@@ -35,25 +35,25 @@
 
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
-        case RequestStatuses.OK:
+        case RequestStatus.OK:
           onSuccess(xhr.response);
           break;
-        case RequestStatuses.MOVED_PERMANENTLY:
+        case RequestStatus.MOVED_PERMANENTLY:
           onError('Похоже, сервер переехал. ' + 'Код ошибки: ' + xhr.status);
           break;
-        case RequestStatuses.FOUND:
+        case RequestStatus.FOUND:
           onError('Сервер временно переехал, но скоро вернется. ' + 'Код ошибки: ' + xhr.status);
           break;
-        case RequestStatuses.BAD_REQUEST:
+        case RequestStatus.BAD_REQUEST:
           onError('Некорректный запрос. ' + 'Код ошибки: ' + xhr.status);
           break;
-        case RequestStatuses.UNAUTHORIZED:
+        case RequestStatus.UNAUTHORIZED:
           onError('Вы должны быть авторизованы. ' + 'Код ошибки: ' + xhr.status);
           break;
-        case RequestStatuses.NOT_FOUND:
+        case RequestStatus.NOT_FOUND:
           onError('Запрашиваемая Вами страница не найдена. ' + 'Код ошибки: ' + xhr.status);
           break;
-        case RequestStatuses.SERVER:
+        case RequestStatus.SERVER:
           onError('Извините, небольшие неполадки с сервером. Приходите завтра. ' + 'Код ошибки: ' + xhr.status);
           break;
         default:
@@ -72,7 +72,7 @@
   }
 
   function load(onSuccess, onError) {
-    var xhr = createRequest(onSuccess, onError)
+    var xhr = createRequest(onSuccess, onError);
     xhr.open('GET', URL_LOAD); // Инициализируем запрос: указываем метод и URL
     xhr.send(); // Отсылаем запрос
   }
@@ -80,12 +80,13 @@
   function save(data, onSuccess, onError) {
     // data - объект с данными, которые необходим отправить
     // onSuccess - функция обратного вызова, которая будет вызываться каждый раз, когда данные отправлены успешно.
-    var xhr = createRequest(onSuccess, onError)
+    var xhr = createRequest(onSuccess, onError);
     xhr.open('POST', URL_SAVE);
     xhr.send(data);
   }
 
   window.backend = {
+    REQUEST_TIMEOUT: REQUEST_TIMEOUT,
     load: load,
     onErrorLoading: onErrorLoading,
     save: save

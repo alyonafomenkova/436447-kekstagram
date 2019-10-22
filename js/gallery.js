@@ -2,14 +2,25 @@
 
 (function () {
   var pictures = document.querySelector('.pictures');
+  var loadedPhotos = [];
+  var completeCallback = function () {};
+
+  function setOnCompleteCallback(listener) {
+    completeCallback = listener; // Задаём функцию (код) извне, который будет выполняться в onSuccessLoading
+  }
+
+  function getLoadedPhotos() {
+    return loadedPhotos;
+  }
 
   function onPhotoClick(photo) {
     // Создание функции (вызывается сразу при задании через addEventListener)
     return function () {
       // Выполняется позже (по клику)
       window.preview.createBigPicture(photo);
-      window.preview.commentsContainer.innerHTML = '';
-      window.preview.createCommentsList(photo.comments);
+      window.comments.commentsContainer.innerHTML = '';
+      window.comments.onCommentsLoaded(photo.comments);
+      window.comments.loadMoreComments(window.comments.COMMENTS_STEP);
       window.preview.openBigPicture();
     };
   }
@@ -25,9 +36,26 @@
     pictures.appendChild(fragment);
   }
 
-  function onSuccessLoading(photos) {
-    renderPictures(photos);
+  function clearPictures() {
+    var photosList = pictures.querySelectorAll('.picture');
+    photosList.forEach(function (item) {
+      pictures.removeChild(item);
+    });
   }
+
+  function onSuccessLoading(photos) {
+    loadedPhotos = photos;
+    renderPictures(photos);
+    completeCallback();
+  }
+
+  window.gallery = {
+    loadedPhotos: loadedPhotos,
+    setOnCompleteCallback: setOnCompleteCallback,
+    getLoadedPhotos: getLoadedPhotos,
+    renderPictures: renderPictures,
+    clearPictures: clearPictures
+  };
 
   window.backend.load(onSuccessLoading, window.backend.onErrorLoading); // загрузка данных с сервера
 })();
